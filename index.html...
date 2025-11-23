@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatrice Mobile</title>
+    <style>
+        /* CSS: STILE E DESIGN */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            text-align: center;
+        }
+        .container {
+            max-width: 350px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Due pulsanti per riga */
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: white;
+            font-weight: bold;
+        }
+        .operazione {
+            background-color: #007bff;
+        }
+        .operazione:hover {
+            background-color: #0056b3;
+        }
+        #risultato {
+            font-size: 1.5em;
+            color: #28a745;
+            padding: 10px;
+            border: 1px dashed #28a745;
+            border-radius: 5px;
+            margin-top: 20px;
+            word-wrap: break-word; /* Assicura che i numeri lunghi vadano a capo */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Calcolatrice Base</h2>
+    
+    <input type="number" id="num1" placeholder="Inserisci il primo numero" value="0">
+    <input type="number" id="num2" placeholder="Inserisci il secondo numero" value="0">
+
+    <div class="buttons">
+        <button class="operazione" onclick="calcola('+')">Somma (+)</button>
+        <button class="operazione" onclick="calcola('-')">Sottrazione (-)</button>
+        <button class="operazione" onclick="calcola('*')">Moltiplicazione (*)</button>
+        <button class="operazione" onclick="calcola('/')">Divisione (/)</button>
+    </div>
+
+    <p id="risultato">Risultato: 0</p>
+</div>
+
+<script>
+    // JAVASCRIPT: LOGICA DI CALCOLO
+    
+    // Funzione principale che viene chiamata al click di ogni pulsante
+    function calcola(operatore) {
+        // 1. Ottiene i valori dai campi di input
+        // I valori vengono automaticamente convertiti in numeri reali (float)
+        const num1 = parseFloat(document.getElementById('num1').value);
+        const num2 = parseFloat(document.getElementById('num2').value);
+        let risultato;
+        let operazioneTesto;
+        let errore = false;
+
+        // 2. Controllo se i numeri sono validi
+        if (isNaN(num1) || isNaN(num2)) {
+            document.getElementById('risultato').innerHTML = "Errore: Inserisci numeri validi!";
+            return; // Interrompe la funzione
+        }
+
+        // 3. Esegue l'operazione in base all'operatore passato
+        switch (operatore) {
+            case '+':
+                risultato = num1 + num2;
+                operazioneTesto = " + ";
+                break;
+            case '-':
+                risultato = num1 - num2;
+                operazioneTesto = " - ";
+                break;
+            case '*':
+                risultato = num1 * num2;
+                operazioneTesto = " * ";
+                break;
+            case '/':
+                if (num2 === 0) {
+                    risultato = "Errore: Divisione per Zero!";
+                    errore = true;
+                } else {
+                    risultato = num1 / num2;
+                }
+                operazioneTesto = " / ";
+                break;
+            default:
+                errore = true;
+                risultato = "Operatore non riconosciuto";
+        }
+
+        // 4. Visualizza il risultato nell'area designata
+        const display = document.getElementById('risultato');
+        
+        if (errore) {
+            display.innerHTML = risultato;
+        } else {
+            // Formatta il risultato finale
+            let espressione = num1 + operazioneTesto + num2 + " = ";
+            display.innerHTML = espressione + risultato.toFixed(2); // Mostra solo 2 decimali
+        }
+    }
+</script>
+
+</body>
+</html>
